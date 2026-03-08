@@ -1,5 +1,12 @@
 import { User } from 'src/user/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Team } from '../team/team.entity';
 
 @Entity()

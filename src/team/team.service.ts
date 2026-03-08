@@ -13,13 +13,13 @@ export class TeamService {
     @InjectRepository(PitScouting)
     private pitScoutingRepository: Repository<PitScouting>,
     @InjectRepository(TeamMatchRecord)
-    private matchRecordRepository: Repository<TeamMatchRecord>
+    private matchRecordRepository: Repository<TeamMatchRecord>,
   ) {}
 
   async findOrCreate(teamNumber: number): Promise<Team> {
     let team = await this.teamRepository.findOne({
       where: { number: teamNumber },
-      relations: ['pitScouting', 'matchRecords']
+      relations: ['pitScouting', 'matchRecords'],
     });
 
     if (!team) {
@@ -32,14 +32,14 @@ export class TeamService {
 
   async findAll() {
     return await this.teamRepository.find({
-      relations: ['pitScouting', 'matchRecords', 'pitScouting.user']
+      relations: ['pitScouting', 'matchRecords', 'pitScouting.user'],
     });
   }
 
   async deleteTeam(teamNumber: number) {
     const team = await this.teamRepository.findOne({
       where: { number: teamNumber },
-      relations: ['pitScouting', 'matchRecords']
+      relations: ['pitScouting', 'matchRecords'],
     });
 
     if (!team) {
@@ -56,10 +56,12 @@ export class TeamService {
 
     // Then delete the team
     await this.teamRepository.remove(team);
-    return { message: `Team ${teamNumber} and all associated records deleted successfully` };
+    return {
+      message: `Team ${teamNumber} and all associated records deleted successfully`,
+    };
   }
 
   async deleteAll() {
     await this.teamRepository.clear();
   }
-} 
+}

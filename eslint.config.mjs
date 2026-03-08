@@ -27,9 +27,29 @@ export default tseslint.config(
   },
   {
     rules: {
+      // Allow any types for TBA API responses (external API integration)
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      
+      // Allow async methods without await (for webhook handlers)
+      '@typescript-eslint/require-await': 'off',
+      
+      // Allow unused variables with underscore prefix
+      '@typescript-eslint/no-unused-vars': ['error', { 
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_'
+      }],
+      
+      // Keep important rules as warnings
       '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn'
+      
+      // Prettier conflicts
+      'prettier/prettier': 'warn'
     },
   },
 );

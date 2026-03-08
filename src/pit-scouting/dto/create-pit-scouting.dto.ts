@@ -1,4 +1,11 @@
-import { IsString, IsNumber, IsArray, IsObject, IsBoolean, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsArray,
+  IsObject,
+  IsBoolean,
+  IsOptional,
+} from 'class-validator';
 
 class Capabilities {
   @IsBoolean()
@@ -16,6 +23,9 @@ class Capabilities {
 
 export class CreatePitScoutingDto {
   @IsString()
+  eventId: string;
+
+  @IsString()
   autoType: string;
 
   @IsObject()
@@ -29,7 +39,7 @@ export class CreatePitScoutingDto {
   photos: string[];
 
   @IsNumber()
-  teamNumber: string;
+  teamNumber: number;
 
   @IsString()
   @IsOptional()

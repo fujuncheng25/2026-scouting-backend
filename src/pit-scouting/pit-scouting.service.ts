@@ -1,17 +1,21 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePitScoutingDto } from './dto/create-pit-scouting.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PitScouting } from './pit-scouting.entity';
-import { TeamService } from "../team/team.service";
-import { UserService } from "src/user/user.service";
+import { TeamService } from '../team/team.service';
+import { UserService } from 'src/user/user.service';
+import { EventTeam } from '../event/event-team.entity';
+import { EventTeamSource } from '../event/event-team.entity';
 @Injectable()
 export class PitScoutingService {
   constructor(
     @InjectRepository(PitScouting)
     private pitScoutingRepository: Repository<PitScouting>,
+    @InjectRepository(EventTeam)
+    private eventTeamRepository: Repository<EventTeam>,
     private teamService: TeamService,
-    private userService: UserService  
+    private userService: UserService,
   ) {}
 
   async create(createPitScoutingDto: CreatePitScoutingDto, userId: string) {
@@ -20,6 +24,26 @@ export class PitScoutingService {
 
     const user = await this.userService.getUserByEmail(userId);
     console.log(user);
+
+    // Ensure team is registered for the event
+    let eventTeam = await this.eventTeamRepository.findOne({
+      where: {
+        scoutEventId: createPitScoutingDto.eventId,
+        teamNumber: teamNumber,
+      },
+    });
+
+    if (!eventTeam) {
+      // Create event-team relationship if it doesn't exist
+      eventTeam = this.eventTeamRepository.create({
+        scoutEventId: createPitScoutingDto.eventId,
+        teamNumber: teamNumber,
+        team: team,
+        source: EventTeamSource.MANUAL,
+      });
+      await this.eventTeamRepository.save(eventTeam);
+      console.log('Created event-team relationship for pit scouting:', eventTeam);
+    }
 
     // Check if team already has pit scouting
     if (team.pitScouting) {
@@ -33,7 +57,7 @@ export class PitScoutingService {
     const pitScouting = this.pitScoutingRepository.create({
       ...createPitScoutingDto,
       user: user!,
-      team
+      team,
     });
 
     return await this.pitScoutingRepository.save(pitScouting);
@@ -52,7 +76,9 @@ export class PitScoutingService {
       .getOne();
 
     if (!pitScouting) {
-      throw new NotFoundException(`No pit scouting found for team ${teamNumber}`);
+      throw new NotFoundException(
+        `No pit scouting found for team ${teamNumber}`,
+      );
     }
 
     return {
@@ -65,28 +91,30 @@ export class PitScoutingService {
       teamNumber: pitScouting.team.number,
       scoutedBy: {
         name: pitScouting.user.name,
-      }
+      },
     };
   }
 
   async deletePitScouting(teamNumber: number) {
     const pitScouting = await this.pitScoutingRepository.findOne({
       where: { team: { number: teamNumber } },
-      relations: ['team']
+      relations: ['team'],
     });
 
     if (!pitScouting) {
-      throw new NotFoundException(`No pit scouting found for team ${teamNumber}`);
+      throw new NotFoundException(
+        `No pit scouting found for team ${teamNumber}`,
+      );
     }
 
     await this.pitScoutingRepository.remove(pitScouting);
-    return { message: `Pit scouting for team ${teamNumber} deleted successfully` };
+    return {
+      message: `Pit scouting for team ${teamNumber} deleted successfully`,
+    };
   }
 
   async deleteAll() {
     await this.pitScoutingRepository.clear();
     return { message: 'All pit scouting records deleted successfully' };
   }
-
-  
 }

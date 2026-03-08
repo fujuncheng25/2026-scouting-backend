@@ -10,10 +10,10 @@ import { TeamMatchRecord } from '../scouting/scouting.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Team, PitScouting, TeamMatchRecord]),
-    AuthModule
+    AuthModule,
   ],
   providers: [TeamService],
   controllers: [TeamController],
   exports: [TeamService],
 })
-export class TeamModule {} 
+export class TeamModule {}
