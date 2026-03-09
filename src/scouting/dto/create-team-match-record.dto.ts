@@ -1,4 +1,9 @@
-import { Alliance, FetchBallPreference, MatchType, TowerStatus } from '../scouting.entity';
+import {
+  Alliance,
+  FetchBallPreference,
+  MatchType,
+  TowerStatus,
+} from '../scouting.entity';
 import {
   IsDefined,
   IsEnum,
@@ -79,19 +84,27 @@ export class EndAndAfterGame {
 }
 
 export class CreateTeamRecordDto {
+  @IsString()
+  scoutEventId: string;
+
+  @IsString()
+  @IsOptional()
+  eventMatchId?: string;
+
   @IsEnum(MatchType)
   matchType: MatchType;
-
-  @IsInt()
-  @Min(0)
-  matchNumber: number;
 
   @IsEnum(Alliance)
   alliance: Alliance;
 
   @IsInt()
   @Min(1)
-  team: number;
+  teamNumber: number;
+
+  @IsInt()
+  @Min(0)
+  @IsOptional()
+  matchNumber?: number;
 
   @ValidateNested()
   @Type(() => Autonomous)

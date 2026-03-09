@@ -1,4 +1,16 @@
-import { Controller, Post, Body, UseGuards, Request, Logger, Get, Param, ParseIntPipe, NotFoundException, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Request,
+  Logger,
+  Get,
+  Param,
+  ParseIntPipe,
+  NotFoundException,
+  Delete,
+} from '@nestjs/common';
 import { PitScoutingService } from './pit-scouting.service';
 import { CreatePitScoutingDto } from './dto/create-pit-scouting.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -11,8 +23,11 @@ export class PitScoutingController {
   constructor(private readonly pitScoutingService: PitScoutingService) {}
 
   @UseGuards(AuthGuard)
-  @Post("create")
-  async create(@Body() createPitScoutingDto: CreatePitScoutingDto, @Request() req: AuthenticatedRequest) {
+  @Post('create')
+  async create(
+    @Body() createPitScoutingDto: CreatePitScoutingDto,
+    @Request() req: AuthenticatedRequest,
+  ) {
     this.logger.log('Received request to create pit scouting');
     this.logger.debug('Request headers:', req.headers);
     this.logger.debug('Request body:', createPitScoutingDto);
@@ -21,26 +36,28 @@ export class PitScoutingController {
     if (!req.user) {
       throw new Error('User not authenticated');
     }
-    
+
     const userId = req.user.sub;
     return this.pitScoutingService.create(createPitScoutingDto, userId);
   }
 
-  @Get("findAll")
-  async findAll(){
+  @Get('findAll')
+  async findAll() {
     return this.pitScoutingService.getPitScouting();
   }
 
   @Get(':teamNumber')
   async getTeamPitScouting(
-    @Param('teamNumber', ParseIntPipe) teamNumber: number
+    @Param('teamNumber', ParseIntPipe) teamNumber: number,
   ) {
     return this.pitScoutingService.findByTeamNumber(teamNumber);
   }
 
   @Delete(':teamNumber')
   @UseGuards(AuthGuard)
-  async deletePitScouting(@Param('teamNumber', ParseIntPipe) teamNumber: number) {
+  async deletePitScouting(
+    @Param('teamNumber', ParseIntPipe) teamNumber: number,
+  ) {
     return this.pitScoutingService.deletePitScouting(teamNumber);
   }
 
@@ -49,7 +66,3 @@ export class PitScoutingController {
     return this.pitScoutingService.deleteAll();
   }
 }
-
-
-
-

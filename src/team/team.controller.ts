@@ -1,12 +1,19 @@
-import { Controller, Get, Delete, Param, ParseIntPipe, UseGuards } from "@nestjs/common";
-import { TeamService } from "./team.service";
+import {
+  Controller,
+  Get,
+  Delete,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
+import { TeamService } from './team.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 
-@Controller("team")
+@Controller('team')
 export class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
-  @Get("findAll")
+  @Get('findAll')
   async findAll() {
     return this.teamService.findAll();
   }

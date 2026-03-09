@@ -1,6 +1,16 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
 import { User } from '../user/user.entity';
 import { Team } from '../team/team.entity';
+import { TBAEvent } from '../tba/tba-event.entity';
+import { TBAMatch } from '../tba/tba-match.entity';
+import { ScoutEvent } from '../event/scout-event.entity';
+import { EventMatch } from '../event/event-match.entity';
 
 export enum MatchType {
   QUAL = 'Qualification',
@@ -93,6 +103,40 @@ export class EndAndAfterGame {
 export class TeamMatchRecord {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @ManyToOne(() => ScoutEvent, (event) => event.matchRecords, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'scoutEventId' })
+  scoutEvent: ScoutEvent;
+
+  @Column()
+  scoutEventId: string;
+
+  @ManyToOne(() => EventMatch, { onDelete: 'CASCADE', nullable: true })
+  @JoinColumn({ name: 'eventMatchId' })
+  eventMatch: EventMatch;
+
+  @Column({ nullable: true })
+  eventMatchId: string;
+
+  // NEW: Link to TBA Event
+  @ManyToOne(() => TBAEvent, (event) => event.scoutingRecords, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'eventKey' })
+  event: TBAEvent;
+
+  @Column({ nullable: true })
+  eventKey: string;
+
+  // NEW: Link to TBA Match
+  @ManyToOne(() => TBAMatch, (match) => match.scoutingRecords)
+  @JoinColumn({ name: 'matchKey' })
+  tbaMatch: TBAMatch;
+
+  @Column({ nullable: true })
+  matchKey: string;
 
   @Column({
     type: 'enum',

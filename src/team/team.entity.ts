@@ -10,9 +10,12 @@ export class Team {
   @Column({ nullable: true })
   name?: string;
 
+  @Column({ type: 'timestamp', nullable: true })
+  lastUpdated?: Date; // For TBA sync tracking
+
   @OneToOne(() => PitScouting, (pitScouting) => pitScouting.team)
   pitScouting: PitScouting;
 
   @OneToMany(() => TeamMatchRecord, (record) => record.team)
   matchRecords: TeamMatchRecord[];
-} 
+}

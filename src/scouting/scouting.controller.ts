@@ -11,6 +11,7 @@ import {
   ParseIntPipe,
   Delete,
   Put,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { CreateTeamRecordDto } from './dto/create-team-match-record.dto';
 import { ScoutingService } from './scouting.service';
@@ -34,7 +35,7 @@ export class ScoutingController {
     await this.scoutingService.create(createTeamRecordDto, userId);
   }
 
-  @Get("findAll")
+  @Get('findAll')
   async findAll() {
     return this.scoutingService.findAll();
   }
@@ -42,7 +43,7 @@ export class ScoutingController {
   @Get(':teamNumber/matches')
   async getTeamMatches(
     @Param('teamNumber', ParseIntPipe) teamNumber: number,
-    @Query('type') matchType?: MatchType
+    @Query('type') matchType?: MatchType,
   ) {
     return this.scoutingService.findTeamMatches(teamNumber, matchType);
   }
@@ -53,6 +54,15 @@ export class ScoutingController {
     return this.scoutingService.findAllMatches();
   }
 
+  @Get('event/:eventId')
+  async getEventMatchRecords(
+    @Param('eventId', ParseUUIDPipe) eventId: string,
+    @Query('team') team?: number,
+    @Query('type') matchType?: MatchType,
+  ) {
+    return this.scoutingService.findEventMatchRecords(eventId, team, matchType);
+  }
+
   @Delete('match/:id')
   @UseGuards(AuthGuard)
   async deleteMatchRecord(@Param('id') id: string) {
@@ -61,7 +71,9 @@ export class ScoutingController {
 
   @Delete('team/:teamNumber/matches')
   @UseGuards(AuthGuard)
-  async deleteTeamMatches(@Param('teamNumber', ParseIntPipe) teamNumber: number) {
+  async deleteTeamMatches(
+    @Param('teamNumber', ParseIntPipe) teamNumber: number,
+  ) {
     return this.scoutingService.deleteTeamMatches(teamNumber);
   }
 
