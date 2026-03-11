@@ -39,10 +39,11 @@ async function bootstrap() {
   return app.getHttpAdapter().getInstance();
 }
 
-// For local development
-if (require.main === module) {
-  bootstrap().then(() => {
-    console.log('NestJS app started locally');
+// For local development and Railway (traditional server)
+if (require.main === module || process.env.RAILWAY_ENVIRONMENT) {
+  bootstrap().then((server) => {
+    console.log('NestJS app started in traditional server mode');
+    server.listen(process.env.PORT || 3001);
   });
 }
 
