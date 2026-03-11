@@ -26,31 +26,60 @@ export class Autonomous {
 
   @IsInt()
   @Min(0)
-  fuelCount: number;
+  fuelCount?: number;
 
   @IsBoolean()
-  isTowerSuccess: boolean;
+  isTowerSuccess?: boolean;
+
+  @IsOptional()
+  @IsInt()
+  shotsTaken?: number;
+
+  @IsOptional()
+  @IsString()
+  shotVolumes?: string;
+
+  @IsOptional()
+  @IsInt()
+  subjectiveAccuracy?: number;
 }
+
 
 export class Teleop {
-  @IsInt()
-  @Min(0)
-  fuelCount: number;
-
-  @IsInt()
-  @Min(0)
-  humanFuelCount: number;
-
-  @IsBoolean()
-  passBump: boolean;
-
-  @IsBoolean()
-  passTrench: boolean;
-
-  @IsEnum(FetchBallPreference)
   @IsOptional()
-  fetchBallPreference: FetchBallPreference;
+  @IsInt()
+  fuelCount?: number;
+
+  @IsOptional()
+  @IsInt()
+  humanFuelCount?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  passBump?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  passTrench?: boolean;
+
+  @IsOptional()
+  @IsEnum(FetchBallPreference)
+  fetchBallPreference?: FetchBallPreference;
+
+  // 新增字段
+  @IsOptional()
+  @IsInt()
+  shotsTaken?: number;
+
+  @IsOptional()
+  @IsString()
+  shotVolumes?: string;
+
+  @IsOptional()
+  @IsInt()
+  subjectiveAccuracy?: number;
 }
+
 
 export class EndAndAfterGame {
   @IsEnum(TowerStatus)

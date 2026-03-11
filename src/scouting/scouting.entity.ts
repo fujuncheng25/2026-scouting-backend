@@ -37,6 +37,11 @@ export enum TowerStatus {
   L3 = 'L3',
 }
 
+//
+// ======================
+// Autonomous
+// ======================
+//
 export class Autonomous {
   @Column('int', { name: 'autoStart' })
   autoStart: number;
@@ -49,8 +54,26 @@ export class Autonomous {
 
   @Column({ default: false })
   isTowerSuccess: boolean;
+
+  // === NEW FIELDS (Step3) ===
+  @Column({ nullable: true })
+  shooterType: string;
+
+  @Column({ nullable: true })
+  shotsTaken: number;
+
+  @Column({ nullable: true })
+  shotVolumes: string;
+
+  @Column({ nullable: true })
+  subjectiveAccuracy: number;
 }
 
+//
+// ======================
+// Teleop
+// ======================
+//
 export class Teleop {
   @Column({ default: 0 })
   fuelCount: number;
@@ -70,8 +93,23 @@ export class Teleop {
     nullable: true,
   })
   fetchBallPreference: FetchBallPreference;
+
+  // === NEW FIELDS (Step4) ===
+  @Column({ nullable: true })
+  shotsTaken: number;
+
+  @Column({ nullable: true })
+  shotVolumes: string;
+
+  @Column({ nullable: true })
+  subjectiveAccuracy: number;
 }
 
+//
+// ======================
+// End & After Game
+// ======================
+//
 export class EndAndAfterGame {
   @Column({
     type: 'enum',
@@ -99,6 +137,11 @@ export class EndAndAfterGame {
   teleopMove: boolean;
 }
 
+//
+// ======================
+// TeamMatchRecord
+// ======================
+//
 @Entity()
 export class TeamMatchRecord {
   @PrimaryGeneratedColumn('uuid')
@@ -120,7 +163,6 @@ export class TeamMatchRecord {
   @Column({ nullable: true })
   eventMatchId: string;
 
-  // NEW: Link to TBA Event
   @ManyToOne(() => TBAEvent, (event) => event.scoutingRecords, {
     nullable: true,
   })
@@ -130,7 +172,6 @@ export class TeamMatchRecord {
   @Column({ nullable: true })
   eventKey: string;
 
-  // NEW: Link to TBA Match
   @ManyToOne(() => TBAMatch, (match) => match.scoutingRecords)
   @JoinColumn({ name: 'matchKey' })
   tbaMatch: TBAMatch;
