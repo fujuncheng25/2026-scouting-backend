@@ -41,11 +41,13 @@ async function bootstrap() {
 
 // For local development
 if (require.main === module) {
-  bootstrap().then(() => {
-    console.log('NestJS app started locally');
+  bootstrap().then(async () => {
+	 const port = process.env.PORT || 3001;
+    await app.listen(port);
+    console.log(`NestJS app started locally on port ${port}`);
+    //console.log('NestJS app started locally');I want to develop locally but there 's no port so I added one. 
   });
 }
-
 // Export for Vercel serverless
 export default async function handler(req: any, res: any) {
   if (!app) {
