@@ -19,20 +19,24 @@ import { Type } from 'class-transformer';
 export class Autonomous {
   @IsInt()
   @Min(0)
+  @Type(() => Number)
   autoStart: number;
 
   @IsBoolean()
   leftStartingZone: boolean;
 
+  @IsOptional()
   @IsInt()
-  @Min(0)
+  @Type(() => Number)
   fuelCount?: number;
 
+  @IsOptional()
   @IsBoolean()
   isTowerSuccess?: boolean;
 
   @IsOptional()
   @IsInt()
+  @Type(() => Number)
   shotsTaken?: number;
 
   @IsOptional()
@@ -41,8 +45,10 @@ export class Autonomous {
 
   @IsOptional()
   @IsInt()
+  @Type(() => Number)
   subjectiveAccuracy?: number;
 }
+
 
 
 export class Teleop {
