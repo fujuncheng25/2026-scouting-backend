@@ -19,38 +19,75 @@ import { Type } from 'class-transformer';
 export class Autonomous {
   @IsInt()
   @Min(0)
+  @Type(() => Number)
   autoStart: number;
 
   @IsBoolean()
   leftStartingZone: boolean;
 
+  @IsOptional()
   @IsInt()
-  @Min(0)
-  fuelCount: number;
+  @Type(() => Number)
+  fuelCount?: number;
 
+  @IsOptional()
   @IsBoolean()
-  isTowerSuccess: boolean;
+  isTowerSuccess?: boolean;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  shotsTaken?: number;
+
+  @IsOptional()
+  @IsString()
+  shotVolumes?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  subjectiveAccuracy?: number;
 }
+
 
 export class Teleop {
-  @IsInt()
-  @Min(0)
-  fuelCount: number;
-
-  @IsInt()
-  @Min(0)
-  humanFuelCount: number;
-
-  @IsBoolean()
-  passBump: boolean;
-
-  @IsBoolean()
-  passTrench: boolean;
-
-  @IsEnum(FetchBallPreference)
   @IsOptional()
-  fetchBallPreference: FetchBallPreference;
+  @IsInt()
+  @Type(() => Number)
+  fuelCount?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  humanFuelCount?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  passBump?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  passTrench?: boolean;
+
+  @IsOptional()
+  @IsEnum(FetchBallPreference)
+  fetchBallPreference?: FetchBallPreference;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  shotsTaken?: number;
+
+  @IsOptional()
+  @IsString()
+  shotVolumes?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  subjectiveAccuracy?: number;
 }
+
 
 export class EndAndAfterGame {
   @IsEnum(TowerStatus)
